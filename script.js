@@ -77,7 +77,7 @@ getData().then(data => {
         const coordinates_pin = [pin.geometry.coordinates[1], pin.geometry.coordinates[0]];
         
         // Representación de datos
-        const mag = Number(pin.properties.mag) || 0; // asegura que mag sea número
+        const mag = Number(pin.properties.mag) || 0; // convierte mag en número y para que no de undefined
         const marker = L.circleMarker(coordinates_pin, {
             radius: mag > 0 ? mag * 2 : 3,  // tamaño según magnitud
             fillColor: getColor(mag),       
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { nivel: "Magnitud 7+", color: getColor(7) }
   ];
 
-  // Creamos dinámicamente los párrafos con su círculo
+  // Crear círculos
   niveles.forEach(item => {
     const p = document.createElement("p");
 
@@ -153,7 +153,7 @@ var GeoportailFrance_plan = L.tileLayer('https://data.geopf.fr/wmts?REQUEST=GetT
 }).addTo(map2);
 
 let marcadorTerremoto = L.layerGroup().addTo(map2)//para añadir los terremotos filtrados
-// nuevo para unir filtros// Filtro de magnitud actual
+// definir rango magnitud
 let magnitudMin = 0;
 let magnitudMax = 10;
 
@@ -169,17 +169,17 @@ getData().then(data => {
 
 // FILTRO  MAGNITUD
 function mapaFiltrado() {
-  marcadorTerremoto.clearLayers();
+  marcadorTerremoto.clearLayers(); //elimina marcadores anteriores para que no se acumulen los terremotos al filtrar
 
-  const filtrados = datosTerremotos.filter(pin => {
+  const filtrados = datosTerremotos.filter(pin => {//recorre los terremotos y aplica los filtros
     const mag = Number(pin.properties.mag) || 0;
     const time = pin.properties.time;
 
-    // Comprobación de magnitud
+    // Comprobación de magnitud. este dentro del rango definido.
     const pasaMagnitud = mag >= magnitudMin && mag < magnitudMax;
 
     // Comprobación de fecha (solo si ambas fechas están seleccionadas)
-    let pasaFecha = true;
+    let pasaFecha = true; //que se filtre aunque no tenga seleccion
 
     if (fechaInicio && fechaFin) {
       pasaFecha = time >= fechaInicio && time <= fechaFin;
@@ -207,10 +207,10 @@ function mapaFiltrado() {
 
 // Eventos de los botones de magnitud
 document.querySelectorAll(".filtro-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".filtro-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
+  btn.addEventListener("click", () => { //añade boton a cada evento
+    document.querySelectorAll(".filtro-btn").forEach(b => b.classList.remove("active")); //que solo el boton clicado este activo
+    btn.classList.add("active"); //para que se vea diferente. acceder y modificar las clases CSS
+    //pasa a numeros los valores para poder filtrar
     magnitudMin = parseFloat(btn.dataset.min);
     magnitudMax = parseFloat(btn.dataset.max);
     mapaFiltrado();
@@ -245,9 +245,9 @@ document.getElementById('applyFilters').addEventListener('click', () => {
 /**************Firebase Auth*****************/
 // Create user
 const createUser = (user) => {
-  db.collection("users")
+  db.collection("users")//accede a la coleccion en firestore
     .doc(user.id) // Usar el UID del usuario como ID del documento en Firestore
-    .set({
+    .set({ //guardar los datos
       email: user.email,
       favorites: [] // Crear array de favoritos vacío
     })
@@ -259,7 +259,7 @@ const createUser = (user) => {
 const signUpUser = (email, password) => {
   firebase
     .auth()
-    .createUserWithEmailAndPassword(email, password)
+    .createUserWithEmailAndPassword(email, password) // crear usuario neuvo
     .then((userCredential) => {
       // Signed in
       let user = userCredential.user;
@@ -281,16 +281,16 @@ const signUpUser = (email, password) => {
 
 document.getElementById("form1").addEventListener("submit", function (event) {
   event.preventDefault();
-  let email = event.target.elements.email.value;
+  let email = event.target.elements.email.value; //extare email y contraseñas
   let pass = event.target.elements.pass.value;
   let pass2 = event.target.elements.pass2.value;
 
-  pass === pass2 ? signUpUser(email, pass) : alert("error password");
+  pass === pass2 ? signUpUser(email, pass) : alert("error password"); //para que sean iguales las contraseñas
 })
 
 // Sign in
 const signInUser = (email, password) => {
-  firebase.auth().signInWithEmailAndPassword(email, password)
+  firebase.auth().signInWithEmailAndPassword(email, password) //inicio sesion
     .then((userCredential) => {
       // Signed in
       let user = userCredential.user;
@@ -308,26 +308,26 @@ const signInUser = (email, password) => {
 
 // Sign out user
 const signOut = () => {
-  let user = firebase.auth().currentUser;
+  let user = firebase.auth().currentUser; //obtiene el user actual
 
-  firebase.auth().signOut().then(() => {
+  firebase.auth().signOut().then(() => { //cerrar sesion
     console.log("Sale del sistema: " + user.email)
   }).catch((error) => {
     console.log("hubo un error: " + error);
   });
 }
 
-document.getElementById("form2").addEventListener("submit", function (event) {
-  event.preventDefault();
+document.getElementById("form2").addEventListener("submit", function (event) { // 
+  event.preventDefault();//evita recargar la pagina
   let email = event.target.elements.email2.value;
   let pass = event.target.elements.pass3.value;
-  signInUser(email, pass)
+  signInUser(email, pass) //autenficar al usuario
 })
-document.getElementById("salir").addEventListener("click", signOut);
+document.getElementById("salir").addEventListener("click", signOut);//cerrar sesion
 
 // Listener de usuario en el sistema
 // Controlar usuario logado
-firebase.auth().onAuthStateChanged(function (user) {
+firebase.auth().onAuthStateChanged(function (user) { 
   if (user) {
     console.log(`Está en el sistema:${user.email} ${user.uid}`);
     document.getElementById("message").innerText = `Está en el sistema: ${user.uid}`;
