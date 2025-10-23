@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terremotos</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="./style.css">
+    <!-- Link de la libreria -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-providers@latest/leaflet-providers.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Terremotos en tiempo real</h1>
+        <div class="encabezado">
+        <a href="index.html" class="inicio">Inicio</a>
+        <a href="#mapaPrincipal" class="terremoto">Terremotos </a> 
+        <a href="#mapa2" class="filtroTerremoto">Encontrar cada terremoto</a> 
+        <a href="#login" class="registro">Registro</a> 
+        </div>
+    </header>
+    <main>
+        <section id="mapaPrincipal">
+            <h2>¿Donde hay terremotos?</h2>
+            <!-- <div class="vista-botones">
+                <button id="verApi" class="vista-btn active">Mostrar API</button>
+                <button id="verFavs" class="vista-btn">Mostrar Favoritos</button>
+            </div> -->
+            <article id="mapa1">
+                <article id="leyenda"></article>
+                <div id="map"></div>
+            </article>
+        </section>
+        <section id="mapa2">
+            <h2>Encuentra cada terremoto por su magnitud y la fecha</h2>
+            <article class="filtros">
+                <h4>Filtrar por magnitud: </h4>
+                <div id="filtro-magnitud">
+                    <button class="filtro-btn" data-min="0" data-max="10">Todos</button>
+                    <button class="filtro-btn" data-min="0" data-max="1">Magnitud 0-1</button>
+                    <button class="filtro-btn" data-min="1" data-max="2">Magnitud 1-2</button>
+                    <button class="filtro-btn" data-min="2" data-max="3">Magnitud 2-3</button>
+                    <button class="filtro-btn" data-min="3" data-max="4">Magnitud 3-4</button>
+                    <button class="filtro-btn" data-min="4" data-max="5">Magnitud 4-5</button>
+                    <button class="filtro-btn" data-min="5" data-max="6">Magnitud 5-6</button>
+                    <button class="filtro-btn" data-min="6" data-max="7">Magnitud 6-7</button>
+                    <button class="filtro-btn" data-min="7" data-max="10">Magnitud 7+</button>
+                </div> 
+                <h4>Filtrar por fecha: </h4>
+                <div class="filtro-fechas">
+                    <label for="startDate">Fecha inicio:</label>
+                    <input type="date" id="startDate">
+
+                    <label for="endDate">Fecha fin:</label>
+                    <input type="date" id="endDate">
+                </div>
+                <button id="applyFilters">Aplicar filtros</button>
+                
+                <div id="map2"></div>
+            </article>
+          
+        </section>
+             <section id="login">
+            <div id="forms-container">
+                <div>
+                    <h3>Formulario de Registro</h3>
+                    <form id="form1" action="#" method="POST">
+                        <div>
+                            <label for="email">Email:</label><br>
+                            <input type="email" id="email" name="email" placeholder="Introduce email..."><br>
+                            <label for="pass">Password:</label><br>
+                            <input type="password" id="pass" name="pass" placeholder="Introduce password..."><br>
+                            <label for="pass2">Repite password:</label><br>
+                            <input type="password" id="pass2" name="pass2" placeholder="Repite password..."><br><br>
+                            <input class="boton-registro" type="submit" value="Enviar">
+                    </form>
+                </div>
+                <div>
+                    <h3>Formulario de Login</h3>
+                    <form id="form2" action="#" method="POST">
+                        <div>
+                            <label for="email2">Email:</label><br>
+                            <input type="email" id="email2" name="email2" placeholder="Introduce email..."><br>
+                            <label for="pass3">Password:</label><br>
+                            <input type="password" id="pass3" name="pass3" placeholder="Introduce password..."><br>
+                            <input class="boton-login" type="submit" value="Enviar">
+                        </div>
+                    </form>
+
+                </div>
+                <div>
+                    <h3>Logout</h3>
+                    <div id="logout">
+                        <p id="message"></p>
+                        <button id="salir">Logout</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+     <footer></footer>
+     <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+
+    <script src="./script.js"></script>
+</body>
+</html>
